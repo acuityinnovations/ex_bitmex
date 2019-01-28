@@ -1,7 +1,8 @@
 defmodule ExBitmex.Rest.Orders do
   alias ExBitmex.Rest
+  alias ExBitmex.Credentials
 
-  @type credentials :: ExBitmex.Credentials.t()
+  @type config :: map | nil
   @type order :: ExBitmex.Order.t()
   @type rate_limit :: ExBitmex.RateLimit.t()
   @type auth_error_reason :: Rest.HTTPClient.auth_error_reason()
@@ -15,31 +16,31 @@ defmodule ExBitmex.Rest.Orders do
           shared_error_reason
           | insufficient_balance_error_reason
 
-  @spec create(credentials, params) ::
+  @spec create(config, params) ::
           {:ok, order, rate_limit} | {:error, create_error_reason, rate_limit | nil}
-  def create(%ExBitmex.Credentials{} = credentials, params) when is_map(params) do
+  def create(config, params) when is_map(params) do
     "/order"
-    |> Rest.HTTPClient.auth_post(credentials, params)
+    |> Rest.HTTPClient.auth_post(Credentials.config(config), params)
     |> parse_response
   end
 
   @type amend_error_reason :: shared_error_reason | insufficient_balance_error_reason
 
-  @spec amend(credentials, params) ::
+  @spec amend(config, params) ::
           {:ok, order, rate_limit} | {:error, amend_error_reason, rate_limit | nil}
-  def amend(%ExBitmex.Credentials{} = credentials, params) when is_map(params) do
+  def amend(config, params) when is_map(params) do
     "/order"
-    |> Rest.HTTPClient.auth_put(credentials, params)
+    |> Rest.HTTPClient.auth_put(Credentials.config(config), params)
     |> parse_response
   end
 
   @type cancel_error_reason :: shared_error_reason
 
-  @spec cancel(credentials, params) ::
+  @spec cancel(config, params) ::
           {:ok, [order], rate_limit} | {:error, cancel_error_reason, rate_limit | nil}
-  def cancel(%ExBitmex.Credentials{} = credentials, params) when is_map(params) do
+  def cancel(config \\ nil, params) when is_map(params) do
     "/order"
-    |> Rest.HTTPClient.auth_delete(credentials, params)
+    |> Rest.HTTPClient.auth_delete(Credentials.config(config), params)
     |> parse_response
   end
 

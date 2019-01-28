@@ -7,16 +7,11 @@ defmodule ExBitmex.Rest.Orders.AmendTest do
     :ok
   end
 
-  @credentials %ExBitmex.Credentials{
-    api_key: System.get_env("BITMEX_API_KEY"),
-    api_secret: System.get_env("BITMEX_SECRET")
-  }
-
   test ".amend returns the order response" do
     use_cassette "rest/orders/amend_ok" do
       assert {:ok, order, _} =
                ExBitmex.Rest.Orders.amend(
-                 @credentials,
+                 default_config(),
                  %{
                    orderID: "8d6f2649-7477-4db5-e32a-d8d5bf99dd9b",
                    leavesQty: 3
@@ -65,7 +60,7 @@ defmodule ExBitmex.Rest.Orders.AmendTest do
     use_cassette "rest/orders/amend_timeout" do
       assert {:error, :timeout, nil} =
                ExBitmex.Rest.Orders.amend(
-                 @credentials,
+                 default_config(),
                  %{
                    orderID: "8d6f2649-7477-4db5-e32a-d8d5bf99dd9b",
                    leavesQty: 3
@@ -73,4 +68,6 @@ defmodule ExBitmex.Rest.Orders.AmendTest do
                )
     end
   end
+
+  defp default_config, do: nil
 end

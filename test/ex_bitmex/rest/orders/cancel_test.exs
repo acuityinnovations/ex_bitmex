@@ -8,16 +8,11 @@ defmodule ExBitmex.Rest.Orders.CancelTest do
     :ok
   end
 
-  @credentials %ExBitmex.Credentials{
-    api_key: System.get_env("BITMEX_API_KEY"),
-    api_secret: System.get_env("BITMEX_SECRET")
-  }
-
   test ".cancel returns a list of results" do
     use_cassette "rest/orders/cancel_ok" do
       assert {:ok, orders, _} =
                ExBitmex.Rest.Orders.cancel(
-                 @credentials,
+                 default_config,
                  %{orderID: "8d6f2649-7477-4db5-e32a-d8d5bf99dd9b"}
                )
 
@@ -65,9 +60,11 @@ defmodule ExBitmex.Rest.Orders.CancelTest do
     use_cassette "rest/orders/cancel_timeout" do
       assert {:error, timeout, nil} =
                ExBitmex.Rest.Orders.cancel(
-                 @credentials,
+                 default_config,
                  %{orderID: "8d6f2649-7477-4db5-e32a-d8d5bf99dd9b"}
                )
     end
   end
+
+  defp default_config, do: nil
 end

@@ -7,16 +7,11 @@ defmodule ExBitmex.Rest.Orders.CreateTest do
     :ok
   end
 
-  @credentials %ExBitmex.Credentials{
-    api_key: System.get_env("BITMEX_API_KEY"),
-    api_secret: System.get_env("BITMEX_SECRET")
-  }
-
   test ".create returns the order response" do
     use_cassette "rest/orders/create_buy_limit_ok" do
       assert {:ok, order, _} =
                ExBitmex.Rest.Orders.create(
-                 @credentials,
+                 default_config,
                  %{
                    symbol: "XBTUSD",
                    side: "Buy",
@@ -67,7 +62,7 @@ defmodule ExBitmex.Rest.Orders.CreateTest do
     use_cassette "rest/orders/create_insufficient_balance" do
       assert {:error, {:insufficient_balance, msg}, %ExBitmex.RateLimit{}} =
                ExBitmex.Rest.Orders.create(
-                 @credentials,
+                 default_config,
                  %{
                    symbol: "XBTUSD",
                    side: "Buy",
@@ -84,7 +79,7 @@ defmodule ExBitmex.Rest.Orders.CreateTest do
     use_cassette "rest/orders/create_timeout" do
       assert {:error, :timeout, nil} =
                ExBitmex.Rest.Orders.create(
-                 @credentials,
+                 default_config,
                  %{
                    symbol: "XBTUSD",
                    side: "Buy",
@@ -94,4 +89,6 @@ defmodule ExBitmex.Rest.Orders.CreateTest do
                )
     end
   end
+
+  defp default_config, do: nil
 end
