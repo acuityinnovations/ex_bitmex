@@ -22,6 +22,45 @@ Setup Bitmex, set `test_mode` to `true` in test environment. In production set t
 config :bitmex, test_mode: false
 ```
 
+## Rest API
+
+Currently this library only supporting order api.
+
+```elixir
+# To use default key access: %{access_keys: ["BITMEX_API_KEY", "BITMEX_API_SECRET"]}
+config = nil
+
+# or can config to tell library how to fetch the keys.
+
+config = %{access_keys: ["BITMEX1_API_KEY", "BITMEX1_API_SECRET"]}
+
+# Create single order
+ExBitmex.Rest.Orders.create(
+  config,
+  %{
+    symbol: "XBTUSD",
+    side: "Buy",
+    orderQty: 1,
+    price: 1
+  }
+)
+
+# Cancel a single order
+ExBitmex.Rest.Orders.cancel(
+  config,
+  %{orderID: "8d6f2649-7477-4db5-e32a-d8d5bf99dd9b"}
+)
+
+# Amend a single order
+ExBitmex.Rest.Orders.amend(
+  config,
+  %{
+    orderID: "8d6f2649-7477-4db5-e32a-d8d5bf99dd9b",
+    leavesQty: 3
+  }
+)
+```
+
 ## Static API Key
 
 By default, this library will fetch the API key from the environment.
