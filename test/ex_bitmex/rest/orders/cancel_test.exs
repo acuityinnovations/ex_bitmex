@@ -12,7 +12,7 @@ defmodule ExBitmex.Rest.Orders.CancelTest do
     use_cassette "rest/orders/cancel_ok" do
       assert {:ok, orders, _} =
                ExBitmex.Rest.Orders.cancel(
-                 default_config,
+                 default_config(),
                  %{orderID: "8d6f2649-7477-4db5-e32a-d8d5bf99dd9b"}
                )
 
@@ -60,7 +60,7 @@ defmodule ExBitmex.Rest.Orders.CancelTest do
     use_cassette "rest/orders/cancel_timeout" do
       assert {:error, timeout, nil} =
                ExBitmex.Rest.Orders.cancel(
-                 default_config,
+                 default_config(),
                  %{orderID: "8d6f2649-7477-4db5-e32a-d8d5bf99dd9b"}
                )
     end

@@ -11,7 +11,7 @@ defmodule ExBitmex.Rest.Orders.CreateTest do
     use_cassette "rest/orders/create_buy_limit_ok" do
       assert {:ok, order, _} =
                ExBitmex.Rest.Orders.create(
-                 default_config,
+                 default_config(),
                  %{
                    symbol: "XBTUSD",
                    side: "Buy",
@@ -62,7 +62,7 @@ defmodule ExBitmex.Rest.Orders.CreateTest do
     use_cassette "rest/orders/create_insufficient_balance" do
       assert {:error, {:insufficient_balance, msg}, %ExBitmex.RateLimit{}} =
                ExBitmex.Rest.Orders.create(
-                 default_config,
+                 default_config(),
                  %{
                    symbol: "XBTUSD",
                    side: "Buy",
@@ -72,21 +72,6 @@ defmodule ExBitmex.Rest.Orders.CreateTest do
                )
 
       assert msg =~ "Account has insufficient Available Balance"
-    end
-  end
-
-  test ".create returns an error tuple when there is a timeout" do
-    use_cassette "rest/orders/create_timeout" do
-      assert {:error, :timeout, nil} =
-               ExBitmex.Rest.Orders.create(
-                 default_config,
-                 %{
-                   symbol: "XBTUSD",
-                   side: "Buy",
-                   orderQty: 1_000_000,
-                   price: 2000
-                 }
-               )
     end
   end
 
