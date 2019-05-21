@@ -129,12 +129,19 @@ defmodule ExBitmex.Ws do
             {:heartbeat, :pong, expected_heartbeat},
             %{heartbeat: heartbeat} = state
           ) do
-        if heartbeat >= expected_heartbeat do
+        client_server_heartbeat_diff = expected_heartbeat - heartbeat
+
+        if client_server_heartbeat_diff >= 10 do
+          :ok =
+            Logger.warn(
+              "#{__MODULE__} close connection due to " <>
+                "client/server heartbeat difference ##{client_server_heartbeat_diff} too big"
+            )
+
+          {:close, state}
+        else
           send_after(self(), {:heartbeat, :ping, heartbeat + 1}, 1_000)
           {:ok, state}
-        else
-          :ok = Logger.warn("#{__MODULE__} terminated due to " <> "no heartbeat ##{heartbeat}")
-          {:close, state}
         end
       end
 
