@@ -57,7 +57,26 @@ defmodule ExBitmex.Ws do
       end
 
       @impl true
+      def handle_ping(:ping, state) do
+        :ok = Logger.info("Received ping #{inspect(state)}")
+        {:reply, :pong, state}
+      end
+
+      @impl true
+      def handle_ping({:ping, msg}, state) do
+        :ok = Logger.info("Received ping #{inspect(state)}")
+        {:reply, {:pong, msg}, state}
+      end
+
+      @impl true
       def handle_pong(:pong, state) do
+        :ok = Logger.info("Received pong #{inspect(state)}")
+        {:ok, inc_heartbeat(state)}
+      end
+
+      @impl true
+      def handle_pong({:pong, _}, state) do
+        :ok = Logger.info("Received pong #{inspect(state)}")
         {:ok, inc_heartbeat(state)}
       end
 
@@ -110,6 +129,8 @@ defmodule ExBitmex.Ws do
             {:heartbeat, :ping, expected_heartbeat},
             %{heartbeat: heartbeat} = state
           ) do
+        :ok = Logger.info("Received ping #{inspect(state)}")
+
         if heartbeat >= expected_heartbeat do
           send_after(self(), {:heartbeat, :ping, heartbeat + 1}, 1_000)
           {:ok, state}
