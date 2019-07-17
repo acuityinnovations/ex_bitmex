@@ -84,6 +84,7 @@ defmodule ExBitmex.Ws do
       def handle_frame({:text, text}, state) do
         case Jason.decode(text) do
           {:ok, %{"request" => %{"op" => "authKey"}, "success" => true} = payload} ->
+            :ok = Logger.info("Subscribing to #{inspect(state[:auth_subscribe])}")
             subscribe(self(), state[:auth_subscribe])
             handle_response(payload, state)
 
@@ -183,7 +184,9 @@ defmodule ExBitmex.Ws do
       end
 
       def subscribe(server, channels) do
-        reply_op(server, "subscribe", channels)
+        res = reply_op(server, "subscribe", channels)
+        :ok = Logger.info("Subscribed to #{inspect(channels)}. Response: #{inspect(res)}")
+        res
       end
 
       def authenticate(server, config) do
