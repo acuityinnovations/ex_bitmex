@@ -1,4 +1,6 @@
 defmodule ExBitmex.Rest.Orders do
+  @behaviour ExBitmex.ApiBehaviour
+
   alias ExBitmex.Rest
 
   @type credentials :: ExBitmex.Credentials.t()
