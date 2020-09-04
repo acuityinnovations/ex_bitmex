@@ -53,7 +53,7 @@ defmodule ExBitmex.Ws do
       @impl true
       def handle_disconnect(disconnect_map, state) do
         :ok = Logger.warn("#{__MODULE__} disconnected: #{inspect(disconnect_map)}")
-        {:ok, state}
+        {:reconnect, state}
       end
 
       @impl true
