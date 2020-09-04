@@ -53,7 +53,7 @@ defmodule ExBitmex.Ws do
       @impl true
       def handle_disconnect(disconnect_map, state) do
         :ok = Logger.warn("#{__MODULE__} disconnected: #{inspect(disconnect_map)}")
-        {:reconnect, state}
+        {:ok, state}
       end
 
       @impl true
@@ -199,7 +199,7 @@ defmodule ExBitmex.Ws do
         "wss://" <> ((test_mode() && "testnet") || "www") <> ".bitmex.com/realtime"
       end
 
-      defoverridable handle_response: 2, handle_disconnect: 2
+      defoverridable handle_response: 2, handle_disconnect: 2, handle_connect: 2
     end
   end
 end
