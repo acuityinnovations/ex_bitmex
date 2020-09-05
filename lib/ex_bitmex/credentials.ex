@@ -23,17 +23,18 @@ defmodule ExBitmex.Credentials do
   end
 
   @doc """
-  Fetch dynamic API credentials
+  Get static API configs passed in directly
 
   ## Examples
-      iex> ExBitmex.Credentials.config(%{access_keys: ["B1_API_KEY", "B1_API_SECRET"]})
+      iex> ExBitmex.Credentials.config(%{api_key: "abcdef", secret_key: "123456"})
   """
   def config(%{
-        access_keys: [api_key_access, api_secret_access]
+        api_key: api_key,
+        secret_key: secret_key
       }) do
     %__MODULE__{
-      api_key: System.get_env(api_key_access),
-      api_secret: System.get_env(api_secret_access)
+      api_key: api_key,
+      api_secret: secret_key
     }
   end
 
