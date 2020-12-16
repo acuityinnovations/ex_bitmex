@@ -100,7 +100,7 @@ defmodule ExBitmex.Rest.HTTPClientTest do
     test "returns an error tuple for 403 status code response with html body" do
       use_cassette "rest/http_client/auth_request_error_403_forbidden", custom: true do
         assert {:error, :banned, nil} =
-          ExBitmex.Rest.HTTPClient.auth_request(:put, "/order/bulk", @credentials, %{})
+                 ExBitmex.Rest.HTTPClient.auth_request(:put, "/order/bulk", @credentials, %{})
       end
     end
 
