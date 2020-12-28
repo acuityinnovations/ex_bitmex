@@ -6,7 +6,11 @@ defmodule ExBitmex.Rest.Instruments do
     |> Rest.HTTPClient.non_auth_get()
   end
 
-  def get_mark_price(instrument) do
+  def get_instrument_detail(instrument) do
+    Rest.HTTPClient.non_auth_get("/instrument", %{symbol: instrument})
+  end
+
+  def get_instrument_detail(instrument) do
     Rest.HTTPClient.non_auth_get("/instrument", %{symbol: instrument})
   end
 end
