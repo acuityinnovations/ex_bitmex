@@ -29,7 +29,7 @@ defmodule ExBitmex.Mixfile do
   defp deps do
     [
       {:httpoison, "~> 1.0"},
-      {:jason, "~> 1.1.0"},
+      {:jason, "~> 1.2"},
       {:mapail, "~> 1.0.2"},
       {:ex_doc, ">= 0.0.0", only: :dev},
       {:dialyxir, "~> 1.0.0-rc.4", only: [:dev], runtime: false},
